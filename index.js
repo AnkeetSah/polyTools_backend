@@ -29,6 +29,7 @@ const User = mongoose.model('User', new mongoose.Schema({
 
 // Step 1: Redirect to Google login
 app.get('/auth/google', (req, res) => {
+  console.log('🔗 Redirecting to Google OAuth...');
   const params = querystring.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
     redirect_uri: process.env.GOOGLE_REDIRECT_URI,
@@ -44,6 +45,7 @@ app.get('/auth/google', (req, res) => {
 // Step 2: Handle Google callback
 app.get('/auth/google/callback', (req, res) => {
   const code = req.query.code;
+  console.log(`🔗 Received Google OAuth code: ${code}`);
 
   const postData = querystring.stringify({
     code,
@@ -95,6 +97,7 @@ res.cookie('token', token, {
   sameSite: 'Lax',
   maxAge: 24 * 60 * 60 * 1000,
 });
+          console.log('✅ User authenticated:', user);
 
 res.redirect(`${process.env.FRONTEND_URL}/home`);
 
@@ -116,7 +119,7 @@ res.redirect(`${process.env.FRONTEND_URL}/home`);
 // /me endpoint
 app.get('/me', async (req, res) => {
   try {
-   
+    console.log(`🔍 Checking user from cookie...`);
     // Check if token exists in cookies
     const token = req.cookies.token;
     if (!token) return res.status(401).json({ error: 'No token provided' });
