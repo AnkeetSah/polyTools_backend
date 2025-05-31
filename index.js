@@ -140,6 +140,9 @@ app.get('/logout', (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello from backend!');
+});
 
 // Server start
 app.listen(process.env.PORT, () => {
