@@ -91,12 +91,13 @@ app.get('/auth/google/callback', (req, res) => {
          // After successful login
 const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-res.cookie('token', token, {
+res.cookie("token", token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'Lax',
+  secure: true,             // must be true on HTTPS (Render)
+  sameSite: "None",         // must be "None" for cross-site cookies
   maxAge: 24 * 60 * 60 * 1000,
 });
+
           console.log('✅ User authenticated:', user);
 
 res.redirect(`${process.env.FRONTEND_URL}/home`);
